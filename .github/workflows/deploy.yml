@@ -1,3 +1,7 @@
+# containerを使う方法
+# 1. docker-compose.yml等あれば、docker compose upできる
+# 2. jobにcontainerを指定し、container内でjobを実行可能（job全体がcontainerに入る）
+# 3. service containerを定義し、runner（またはcontainer）から使用可能（DB containerなど、部分的に使用するイメージ）
 name: Deployment (Container)
 on:
   push:
