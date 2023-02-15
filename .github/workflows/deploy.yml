@@ -12,17 +12,20 @@ jobs:
     environment: testing
     runs-on: ubuntu-latest
     # コンテナ内でjobを実行可能
-    # service containerを使用する場合、jobの実行はcontainer内でもrunnerでも可能なので、container項目は無しでもok
-    container:
-      image: node:16
+    # containerを指定していると、service containerもこのcontainer内で実行される
+    # container:
+    #   image: node:16
     env:
       # docker imageだと値が変わるので注意
       MONGODB_CONNECTION_PROTOCOL: mongodb
-      # サービスコンテナのkey名で接続可能
-      MONGODB_CLUSTER_ADDRESS: mongodb
+      # container内で実行していれば、サービスコンテナのkey名で接続可能
+      # MONGODB_CLUSTER_ADDRESS: mongodb
+      # container内で無ければ（runner環境なら）サービスコンテナのkeyは使えないので、hostを指定する
+      MONGODB_CLUSTER_ADDRESS: 127.0.0.1:27017
       # サービスコンテナに設定した値
       MONGODB_USERNAME: root
       MONGODB_PASSWORD: example
+      # コンテナではなく実際のmongo dbに接続する場合
       # MONGODB_CONNECTION_PROTOCOL: mongodb+srv
       # MONGODB_CLUSTER_ADDRESS: cluster0.sncutzn.mongodb.net
       # MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
@@ -33,6 +36,9 @@ jobs:
       # 任意の名前
       mongodb:
         image: mongo
+        # container内でservice containerを動かさない場合、portの指定が必要
+        ports:
+          - 27017:27017
         # docker imageの公式を見ると、envが2つ必要なことが分かる
         # https://hub.docker.com/_/mongo
         env:
