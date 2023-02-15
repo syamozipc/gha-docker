@@ -16,12 +16,19 @@ jobs:
     container:
       image: node:16
     env:
-      MONGODB_CONNECTION_PROTOCOL: mongodb+srv
-      MONGODB_CLUSTER_ADDRESS: cluster0.sncutzn.mongodb.net
+      # docker imageだと値が変わるので注意
+      MONGODB_CONNECTION_PROTOCOL: mongodb
+      # サービスコンテナのkey名で接続可能
+      MONGODB_CLUSTER_ADDRESS: mongodb
+      # サービスコンテナに設定した値
       MONGODB_USERNAME: root
       MONGODB_PASSWORD: example
+      # MONGODB_CONNECTION_PROTOCOL: mongodb+srv
+      # MONGODB_CLUSTER_ADDRESS: cluster0.sncutzn.mongodb.net
+      # MONGODB_USERNAME: ${{ secrets.MONGODB_USERNAME }}
+      # MONGODB_PASSWORD: ${{ secrets.MONGODB_PASSWORD }}
       PORT: 8080
-    # サービスコンテナ
+    # DBテスト用のサービスコンテナ
     services:
       # 任意の名前
       mongodb:
